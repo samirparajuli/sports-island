@@ -1017,6 +1017,9 @@ var products = [
 // Local Cart State array variables
 var cart = [];
 
+// Local Cart State variables
+var cart = [];
+
 function renderProds(filter) {
     filter = filter || 'all';
     var grid = document.getElementById('prod-grid');
@@ -1048,7 +1051,6 @@ window.toggleCart = function(isOpen) {
 
 // Add product details to your localized list array
 window.addLocalItem = function(name, price) {
-    // Check if the jersey item is already inside the cart array stack
     var existingItem = cart.find(function(item) { return item.name === name; });
     
     if (existingItem) {
@@ -1100,11 +1102,6 @@ window.removeLocalItem = function(index) {
     updateCartUI();
 };
 
-window.openOtpCheckout = function() {
-    alert("Proceeding to phone OTP verification validation system!");
-    // Here we will inject our Firebase configuration code 
-};
-
 window.filterProds = function(f, btn) {
     document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
     btn.classList.add('active');
@@ -1113,29 +1110,146 @@ window.filterProds = function(f, btn) {
 
 renderProds();
 
-var obs = new IntersectionObserver(function(entries){
-  entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-up').forEach(function(el){ obs.observe(el); });
-</script>
 
-<link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.css" />
-<div id="custom-cart-drawer" style="position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background: #111; color: white; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 9999; transition: 0.3s; padding: 20px; box-sizing: border-box; font-family: sans-serif; overflow-y: auto;">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <h2 style="margin: 0; font-size: 24px; color: #fff;">Your Cart</h2>
-    <button onclick="toggleCart(false)" style="background: none; border: none; color: #ff4d4d; font-size: 28px; cursor: pointer;">&times;</button>
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-up').forEach(function(el){ obs.observe(el); });
+  </script> <div id="custom-cart-drawer" style="position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background: #111; color: white; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 9999; transition: 0.3s; padding: 20px; box-sizing: border-box; font-family: sans-serif; overflow-y: auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 style="margin: 0; font-size: 24px; color: #fff;">Your Cart</h2>
+      <button onclick="toggleCart(false)" style="background: none; border: none; color: #ff4d4d; font-size: 28px; cursor: pointer;">&times;</button>
+    </div>
+    
+    <div id="cart-items-list" style="min-height: 200px; border-bottom: 1px solid #333; padding-bottom: 15px;"></div>
+    
+    <div style="margin-top: 20px;">
+      <h3 style="display: flex; justify-content: space-between; color: #ccc;">Total: <span id="cart-total-price">$0.00</span></h3>
+      <button onclick="openOtpCheckout()" style="width: 100%; background: #ff4d4d; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px;">Proceed to Checkout</button>
+    </div>
   </div>
-  
-  <div id="cart-items-list" style="min-height: 200px; border-bottom: 1px solid #333; padding-bottom: 15px;"></div>
-  
-  <div style="margin-top: 20px;">
-    <h3 style="display: flex; justify-content: space-between; color: #ccc;">Total: <span id="cart-total-price">$0.00</span></h3>
-    <button onclick="openOtpCheckout()" style="width: 100%; background: #ff4d4d; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px;">Proceed to Checkout</button>
-  </div>
-</div>
 
-<div id="cart-floating-icon" onclick="toggleCart(true)" style="position: fixed; bottom: 30px; right: 30px; background: #ff4d4d; color: white; padding: 15px 20px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-weight: bold; z-index: 9998; font-family: sans-serif;">
-  🛒 Cart (<span id="floating-cart-count">0</span>)
-</div>
+  <div id="cart-floating-icon" onclick="toggleCart(true)" style="position: fixed; bottom: 30px; right: 30px; background: #ff4d4d; color: white; padding: 15px 20px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-weight: bold; z-index: 9998; font-family: sans-serif;">
+    🛒 Cart (<span id="floating-cart-count">0</span>)
+  </div>
+
+  <div id="checkout-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; justify-content: center; align-items: center; font-family: sans-serif;">
+    <div style="background: #1a1a1a; color: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); position: relative; border: 1px solid #333;">
+      <button onclick="closeCheckoutModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #aaa; font-size: 24px; cursor: pointer;">&times;</button>
+      <h2 style="margin-top: 0; color: #ff4d4d; border-bottom: 1px solid #333; padding-bottom: 10px;">Secure Checkout</h2>
+      
+      <div id="phone-step">
+        <p style="color: #ccc; font-size: 14px;">Enter your phone number (with country code) to verify your order via OTP SMS.</p>
+        <input type="tel" id="checkout-phone" placeholder="+1234567890" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px;">
+        <button onclick="sendOtpSms()" style="width: 100%; background: #ff4d4d; color: white; border: none; padding: 12px; font-weight: bold; font-size: 16px; border-radius: 4px; cursor: pointer;">Send Verification Code</button>
+      </div>
+
+      <div id="otp-step" style="display: none;">
+        <p style="color: #ccc; font-size: 14px; margin-bottom: 5px;">We sent a 6-digit code to your phone. Enter it below:</p>
+        <input type="text" id="checkout-otp" placeholder="6-Digit OTP Code" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; font-size: 16px; letter-spacing: 4px; text-align: center; margin-bottom: 15px;">
+        <button onclick="verifyOtpSms()" style="width: 100%; background: #25D366; color: white; border: none; padding: 12px; font-weight: bold; font-size: 16px; border-radius: 4px; cursor: pointer;">Verify & View Payment Options</button>
+      </div>
+
+      <div id="payment-step" style="display: none; text-align: center;">
+        <div style="background: #25D366; color: white; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; font-size: 14px;">✓ Phone Number Verified!</div>
+        <p style="color: #ccc; font-size: 14px; margin-bottom: 15px;">Select your preferred payment method to complete your Jersey order:</p>
+        <button onclick="completeOrderWithWhatsApp()" style="width: 100%; background: #00E676; color: black; border: none; padding: 12px; font-weight: bold; font-size: 15px; border-radius: 4px; cursor: pointer; margin-bottom: 10px;">
+          💬 Pay via WhatsApp Order Desk
+        </button>
+        <button onclick="alert('Card simulation processed successfully!')" style="width: 100%; background: #ffffff; color: black; border: none; padding: 12px; font-weight: bold; font-size: 15px; border-radius: 4px; cursor: pointer;">
+          💳 Pay with Card (Demo Sandbox)
+        </button>
+      </div>
+      <div id="recaptcha-container" style="margin-top: 10px;"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
+    // ⚠️ PASTE YOUR SECURE CONFIG FROM FIREBASE CONSOLE HERE:
+    const firebaseConfig = {
+      apiKey: "YOUR_PROJECT_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.addEventListener('load', function() {
+        window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+            'size': 'invisible'
+        });
+    });
+
+    let confirmationResultTracker;
+
+    window.openOtpCheckout = function() {
+        if (typeof cart === 'undefined' || cart.length === 0) {
+            alert("Your cart is empty! Add a jersey first.");
+            return;
+        }
+        window.toggleCart(false);
+        document.getElementById('checkout-modal').style.display = 'flex';
+    };
+
+    window.closeCheckoutModal = function() {
+        document.getElementById('checkout-modal').style.display = 'none';
+    };
+
+    window.sendOtpSms = function() {
+        var phoneNumber = document.getElementById('checkout-phone').value.trim();
+        if(!phoneNumber) { alert("Please provide a valid phone number setup."); return; }
+        
+        var appVerifier = window.recaptchaVerifier;
+        
+        signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+            .then(function(confirmationResult) {
+                window.confirmationResultTracker = confirmationResult;
+                alert("OTP successfully dispatched to " + phoneNumber);
+                document.getElementById('phone-step').style.display = 'none';
+                document.getElementById('otp-step').style.display = 'block';
+            }).catch(function(error) {
+                alert("Error sending OTP SMS: " + error.message);
+            });
+    };
+
+    window.verifyOtpSms = function() {
+        var code = document.getElementById('checkout-otp').value.trim();
+        if(!code) { alert("Please input the 6-digit confirmation key."); return; }
+        
+        window.confirmationResultTracker.confirm(code).then(function(result) {
+            document.getElementById('otp-step').style.display = 'none';
+            document.getElementById('payment-step').style.display = 'block';
+        }).catch(function(error) {
+            alert("Invalid security confirmation key code. Please retry.");
+        });
+    };
+
+    window.completeOrderWithWhatsApp = function() {
+        var itemSummary = cart.map(function(item) {
+            return "• " + item.name + " (Qty: " + item.quantity + ")";
+        }).join("%0A");
+        
+        var totalPrice = document.getElementById('cart-total-price').innerText;
+        var whatsappText = "Hello Sport Island! I verified my phone via OTP. Please process my order:%0A%0A" 
+            + itemSummary + "%0A%0ATotal Value: " + totalPrice;
+            
+        var deskNumber = "1234567890"; // Put your real business mobile number here!
+        window.open("https://wa.me/" + deskNumber + "?text=" + whatsappText, "_blank");
+        
+        cart = [];
+        updateCartUI();
+        window.closeCheckoutModal();
+    };
+  </script>
+
 </body>
 </html>
+    
+    
