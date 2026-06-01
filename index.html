@@ -1014,6 +1014,9 @@ var products = [
   {name:'Spike Volleyball',sport:'football',color:'#17a2b8',bg:'#001f1a',num:'6',price:'Rs 900'},
 ];
 
+// Local Cart State array variables
+var cart = [];
+
 function renderProds(filter) {
     filter = filter || 'all';
     var grid = document.getElementById('prod-grid');
@@ -1021,53 +1024,85 @@ function renderProds(filter) {
         return p.sport === filter;
     });
 
-    grid.innerHTML = filtered.map(function(p) {
-        var price = "80.00";
-        // Escape single quotes in names so they don't break the string
-        var safeName = p.name.replace(/'/g, "\\'"); 
-
+    grid.innerHTML = filtered.map(function(p, index) {
+        var price = 80.00;
         return '<div class="prod-card">'
             + '<div class="prod-img" style="background:' + p.bg + ';">'
             + (typeof makeHangerSVG === 'function' ? makeHangerSVG() : '') 
             + '</div>'
             + '<h3>' + p.name + '</h3>'
             + '<p>Sport: ' + p.sport + '</p>'
-            + '<p>Price: $' + price + '</p>'
-            // This clean button uses a direct click function to force open the cart panel instantly
-            + "<button class='btn buy-btn' onclick=\"addToCart('" + safeName + "', '" + price + "', '" + p.sport + "')\">"
-            + " Add to Cart"
-            + "</button>"
+            + '<p>Price: $' + price.toFixed(2) + '</p>'
+            + '<button class="btn buy-btn" style="background:#ff4d4d; color:white; border:none; padding:8px 15px; cursor:pointer; font-weight:bold; width:100%;" onclick="addLocalItem(\'' + p.name.replace(/'/g, "\\'") + '\', ' + price + ')">'
+            + ' Add to Cart'
+            + '</button>'
             + '</div>';
     }).join('');
 }
 
-// 🛒 THE GOLDEN SCRIPT: Speaking directly to Snipcart's internal engine
-window.addToCart = function(name, price, sport) {
-    if (!window.Snipcart) {
-        alert("Snipcart is still loading... Please wait a second and try again!");
+// Open and Close Cart Actions
+window.toggleCart = function(isOpen) {
+    var drawer = document.getElementById('custom-cart-drawer');
+    drawer.style.right = isOpen ? '0px' : '-400px';
+};
+
+// Add product details to your localized list array
+window.addLocalItem = function(name, price) {
+    // Check if the jersey item is already inside the cart array stack
+    var existingItem = cart.find(function(item) { return item.name === name; });
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ name: name, price: price, quantity: 1 });
+    }
+    
+    updateCartUI();
+    toggleCart(true); // Automatically slide open cart drawer visually
+};
+
+// Redraw cart item components inside your menu drawer panel UI
+function updateCartUI() {
+    var listContainer = document.getElementById('cart-items-list');
+    var totalDisplay = document.getElementById('cart-total-price');
+    var badgeCount = document.getElementById('floating-cart-count');
+    
+    if (cart.length === 0) {
+        listContainer.innerHTML = '<p style="color:#777; text-align:center; padding-top:40px;">Your cart is empty</p>';
+        totalDisplay.innerText = '$0.00';
+        badgeCount.innerText = '0';
         return;
     }
     
-    var itemId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    var total = 0;
+    var count = 0;
     
-    Snipcart.api.cart.items.add({
-        id: itemId,
-        name: name,
-        price: parseFloat(price),
-        url: 'https://thesportislands.netlify.app/',
-        quantity: 1,
-        dimensions: {
-            weight: 300 
-        },
-        customFields: [
-            { name: 'Sport', value: sport }
-        ]
-    }).then(function() {
-        // Force the sidebar cart drawer to open up immediately
-        Snipcart.api.theme.cart.open();
-    }).catch(function(error) {
-        console.error("Snipcart Error:", error);
-    });
+    listContainer.innerHTML = cart.map(function(item, index) {
+        var itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        count += item.quantity;
+        
+        return '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#222; padding:10px; border-radius:4px;">'
+            + '<div>'
+            + '<h4 style="margin:0 0 5px 0; font-size:14px;">' + item.name + '</h4>'
+            + '<span style="color:#aaa; font-size:12px; font-family:monospace;">' + item.quantity + 'x $' + item.price.toFixed(2) + '</span>'
+            + '</div>'
+            + '<button onclick="removeLocalItem(' + index + ')" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-weight:bold;">Remove</button>'
+            + '</div>';
+    }).join('');
+    
+    totalDisplay.innerText = '$' + total.toFixed(2);
+    badgeCount.innerText = count;
+}
+
+window.removeLocalItem = function(index) {
+    cart.splice(index, 1);
+    updateCartUI();
+};
+
+window.openOtpCheckout = function() {
+    alert("Proceeding to phone OTP verification validation system!");
+    // Here we will inject our Firebase configuration code 
 };
 
 window.filterProds = function(f, btn) {
@@ -1083,8 +1118,24 @@ var obs = new IntersectionObserver(function(entries){
 }, { threshold: 0.1 });
 document.querySelectorAll('.fade-up').forEach(function(el){ obs.observe(el); });
 </script>
-<script async src="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.js"></script>
-<div id="snipcart" data-api-key="NzMyMDU3MTQtYWI0Ni00Njk0LWJjYjQtNzU3NjhiZGU3ZDM2NjM4MTAyNzY0NTI0NTY3NjI4" hidden></div>
+
 <link rel="stylesheet" href="https://cdn.snipcart.com/themes/v3.3.0/default/snipcart.css" />
+<div id="custom-cart-drawer" style="position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background: #111; color: white; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 9999; transition: 0.3s; padding: 20px; box-sizing: border-box; font-family: sans-serif; overflow-y: auto;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h2 style="margin: 0; font-size: 24px; color: #fff;">Your Cart</h2>
+    <button onclick="toggleCart(false)" style="background: none; border: none; color: #ff4d4d; font-size: 28px; cursor: pointer;">&times;</button>
+  </div>
+  
+  <div id="cart-items-list" style="min-height: 200px; border-bottom: 1px solid #333; padding-bottom: 15px;"></div>
+  
+  <div style="margin-top: 20px;">
+    <h3 style="display: flex; justify-content: space-between; color: #ccc;">Total: <span id="cart-total-price">$0.00</span></h3>
+    <button onclick="openOtpCheckout()" style="width: 100%; background: #ff4d4d; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px;">Proceed to Checkout</button>
+  </div>
+</div>
+
+<div id="cart-floating-icon" onclick="toggleCart(true)" style="position: fixed; bottom: 30px; right: 30px; background: #ff4d4d; color: white; padding: 15px 20px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-weight: bold; z-index: 9998; font-family: sans-serif;">
+  🛒 Cart (<span id="floating-cart-count">0</span>)
+</div>
 </body>
 </html>
