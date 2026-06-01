@@ -1022,32 +1022,29 @@ function renderProds(filter) {
     });
 
     grid.innerHTML = filtered.map(function(p) {
-        // Safe defaults for price and making a clean ID
         var price = "80.00";
         var itemId = p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
         return '<div class="prod-card">'
             + '<div class="prod-img" style="background:' + p.bg + ';">'
-            + '<svg width="120" height="160" viewBox="0 0 120 155" fill="' + p.color + '">'
-            // Note: This automatically grabs your original SVG path data if it's there
+            // This pulls in your custom hanger SVG function shown in your screenshots
             + (typeof makeHangerSVG === 'function' ? makeHangerSVG() : '') 
-            + '</svg>'
             + '</div>'
             + '<h3>' + p.name + '</h3>'
             + '<p>Sport: ' + p.sport + '</p>'
             + '<p>Price: $' + price + '</p>'
-            // Clean, perfectly-spaced data attributes for Snipcart:
             + '<button class="snipcart-add-item"'
             + ' data-item-id="' + itemId + '"'
             + ' data-item-name="' + p.name + '"'
             + ' data-item-price="' + price + '"'
-            + ' data-item-url="https://thesportislands.netlify.app"'
+            + ' data-item-url="https://thesportislands.netlify.app/"' // Added trailing slash to match domain root
             + ' data-item-custom1-name="Sport"'
             + ' data-item-custom1-value="' + p.sport + '">'
             + ' Add to Cart'
             + '</button>'
             + '</div>';
     }).join('');
+
 
     // 🔥 THE FIX FOR DYNAMIC LOOPS: Tell Snipcart to re-scan the page for the new buttons!
     if (window.Snipcart) {
