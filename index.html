@@ -1015,37 +1015,50 @@ var products = [
 ];
 
 function renderProds(filter) {
-  filter = filter || 'all';
-  var grid = document.getElementById('prod-grid');
-  var filtered = filter === 'all' ? products : products.filter(function(p){ return p.sport === filter; });
-  grid.innerHTML = filtered.map(function(p){
-    // We will hardcode a price like 80.00 since it's not in your array yet, 
-    // or you can add a price property to each object in your products array!
-    var price = p.price || "80.00"; 
-    
-    return '<div class="prod-card">'
-        + '<div class="prod-img" style="background:' + p.bg + ';">'
-        + '<svg width="120" height="160" viewBox="0 0 120 155" fill="' + p.color + '">...</svg>' // your existing SVG path
-        + '</div>'
-        + '<h3>' + p.name + '</h3>'
-        + '<p>Sport: ' + p.sport + '</p>'
-        + '<p>Price: $' + price + '</p>'
-        
-        // ADD THIS SNIPCART BUTTON RIGHT HERE:
-        + '<button class="snipcart-add-item" '
-        + '  data-item-id="' + p.name.replace(/\s+/g, '-').toLowerCase() + '" '
-        + '  data-item-name="' + p.name + '" '
-        + '  data-item-price="' + price + '" '
-        + '  data-item-url="https://thesportislands.netlify.app" '
-        + '  data-item-custom1-name="Sport" '
-        + '  data-item-custom1-value="' + p.sport + '" '
-        + '  data-item-custom2-name="Color Code" '
-        + '  data-item-custom2-value="' + p.color + '"> '
-        + '  Add to Cart '
-        + '</button>'
-        
-        + '</div>';
-}).join('');
+    filter = filter || 'all';
+    var grid = document.getElementById('prod-grid');
+    var filtered = filter === 'all' ? products : products.filter(function(p) {
+        return p.sport === filter;
+    });
+
+    grid.innerHTML = filtered.map(function(p) {
+        // Safe defaults for price and making a clean ID
+        var price = "80.00";
+        var itemId = p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+        return '<div class="prod-card">'
+            + '<div class="prod-img" style="background:' + p.bg + ';">'
+            + '<svg width="120" height="160" viewBox="0 0 120 155" fill="' + p.color + '">'
+            // Note: This automatically grabs your original SVG path data if it's there
+            + (typeof makeHangerSVG === 'function' ? makeHangerSVG() : '') 
+            + '</svg>'
+            + '</div>'
+            + '<h3>' + p.name + '</h3>'
+            + '<p>Sport: ' + p.sport + '</p>'
+            + '<p>Price: $' + price + '</p>'
+            // Clean, perfectly-spaced data attributes for Snipcart:
+            + '<button class="snipcart-add-item"'
+            + ' data-item-id="' + itemId + '"'
+            + ' data-item-name="' + p.name + '"'
+            + ' data-item-price="' + price + '"'
+            + ' data-item-url="https://thesportislands.netlify.app"'
+            + ' data-item-custom1-name="Sport"'
+            + ' data-item-custom1-value="' + p.sport + '">'
+            + ' Add to Cart'
+            + '</button>'
+            + '</div>';
+    }).join('');
+
+    // 🔥 THE FIX FOR DYNAMIC LOOPS: Tell Snipcart to re-scan the page for the new buttons!
+    if (window.Snipcart) {
+        document.addEventListener('snipcart.ready', function() {
+            Snipcart.api.items.bind();
+        });
+        // If snipcart is already loaded, bind immediately
+        try {
+            Snipcart.api.items.bind();
+        } catch(e) {}
+    }
 }
 
 window.filterProds = function(f, btn) {
