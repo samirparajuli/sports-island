@@ -3,715 +3,316 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sport Island </title>
+<title>Sport Island — Nepal's #1 Jersey Supplier</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --ink: #0d0d0d;
-    --white: #f9f7f2;
-    --red: #c8191a;
-    --red-dark: #8f0e0e;
-    --gold: #e8a020;
-    --gray: #3a3a3a;
-    --gray-light: #e4e1d8;
-    --gray-mid: #8a8680;
-    --card-bg: #fff;
-    --nav-h: 70px;
-  }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Barlow', sans-serif;
-    background: var(--ink);
-    color: var(--white);
-    overflow-x: hidden;
-  }
-
-  .jersey-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-    background: #0d0d0d;
-  }
-
-  .jersey-row {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    display: flex;
-    gap: 0;
-    opacity: 0.13;
-  }
-
-  .jersey-row:nth-child(2) { top: 320px; opacity: 0.09; transform: translateX(60px); }
-  .jersey-row:nth-child(3) { top: 640px; opacity: 0.06; transform: translateX(-40px); }
-
-  .jersey-item {
-    flex: 0 0 auto;
-    width: 160px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 10px;
-  }
-
-  .hanger { width: 70px; height: 24px; position: relative; }
-  .hanger svg { width: 100%; height: 100%; }
-  .jersey-shape { width: 130px; height: 160px; position: relative; }
-  .jersey-shape svg { width: 100%; height: 100%; }
-
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    height: var(--nav-h);
-    background: rgba(13,13,13,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 40px;
-    z-index: 100;
-  }
-
-  .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 2px;
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .logo-dot {
-    width: 10px; height: 10px;
-    background: var(--red);
-    border-radius: 50%;
-    display: inline-block;
-  }
-
-  .nav-links {
-    display: flex; gap: 32px; list-style: none;
-  }
-
-  .nav-links a {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: rgba(249,247,242,0.65);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--white); }
-
-  .nav-cta {
-    background: var(--red) !important;
-    color: var(--white) !important;
-    padding: 8px 20px;
-    border-radius: 4px;
-    font-weight: 700 !important;
-    transition: background 0.2s !important;
-  }
-  .nav-cta:hover { background: var(--red-dark) !important; }
-
-  .hero {
-    position: relative;
-    z-index: 10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: calc(var(--nav-h) + 40px) 20px 60px;
-  }
-
-  .hero-eyebrow {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 16px;
-  }
-
-  .hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(64px, 10vw, 130px);
-    line-height: 0.9;
-    letter-spacing: 4px;
-    color: var(--white);
-    margin-bottom: 24px;
-  }
-
-  .hero-title span { color: var(--red); }
-
-  .hero-sub {
-    font-size: 17px;
-    font-weight: 300;
-    color: rgba(249,247,242,0.6);
-    max-width: 500px;
-    line-height: 1.7;
-    margin-bottom: 40px;
-  }
-
-  .hero-btns {
-    display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
-  }
-
-  .btn-primary {
-    background: var(--red);
-    color: var(--white);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 14px 36px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .btn-primary:hover { background: var(--red-dark); transform: translateY(-1px); }
-
-  .btn-outline {
-    background: transparent;
-    color: var(--white);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 13px 36px;
-    border: 1.5px solid rgba(255,255,255,0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    transition: border-color 0.2s, transform 0.15s;
-  }
-  .btn-outline:hover { border-color: var(--white); transform: translateY(-1px); }
-
-  .hero-stats {
-    display: flex; gap: 48px; margin-top: 64px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 40px;
-  }
-
-  .stat { text-align: center; }
-
-  .stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 44px;
-    line-height: 1;
-    color: var(--white);
-    letter-spacing: 2px;
-  }
-
-  .stat-label {
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(249,247,242,0.4);
-    margin-top: 4px;
-  }
-
-  .marquee-wrap {
-    position: relative; z-index: 10;
-    background: var(--red);
-    padding: 12px 0;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .marquee-inner {
-    display: inline-flex;
-    gap: 0;
-    animation: scroll-left 24s linear infinite;
-  }
-
-  .marquee-item {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 3px;
-    color: rgba(255,255,255,0.9);
-    padding: 0 32px;
-  }
-
-  .marquee-dot {
-    color: rgba(255,255,255,0.4);
-    font-size: 8px;
-    vertical-align: middle;
-  }
-
-  @keyframes scroll-left {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  section {
-    position: relative;
-    z-index: 10;
-    padding: 80px 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 12px;
-  }
-
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(36px, 5vw, 58px);
-    letter-spacing: 3px;
-    line-height: 1;
-    color: var(--white);
-    margin-bottom: 40px;
-  }
-
-  .cat-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
-
-  .cat-card {
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-    aspect-ratio: 3/4;
-    background: #1a1a1a;
-    border: 1px solid rgba(255,255,255,0.07);
-    transition: transform 0.25s, border-color 0.25s;
-  }
-
-  .cat-card:hover { transform: translateY(-4px); border-color: rgba(200,25,26,0.5); }
-
-  .cat-card.wide {
-    grid-column: span 2;
-    aspect-ratio: 16/9;
-  }
-
-  .cat-svg-wrap {
-    width: 100%; height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    inset: 0;
-  }
-
-  .cat-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.1) 70%);
-  }
-
-  .cat-info {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    padding: 20px;
-  }
-
-  .cat-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 26px;
-    letter-spacing: 2px;
-    color: var(--white);
-    line-height: 1;
-  }
-
-  .cat-count {
-    font-size: 13px;
-    color: rgba(249,247,242,0.5);
-    margin-top: 4px;
-  }
-
-  .cat-badge {
-    position: absolute;
-    top: 14px; right: 14px;
-    background: var(--red);
-    color: white;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 3px;
-  }
-
-  .prod-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  }
-
-  .prod-card {
-    background: #161616;
-    border-radius: 6px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.06);
-    cursor: pointer;
-    transition: transform 0.2s, border-color 0.2s;
-  }
-
-  .prod-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.15); }
-
-  .prod-img {
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .prod-info { padding: 14px 16px; }
-
-  .prod-name {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: var(--white);
-    margin-bottom: 4px;
-  }
-
-  .prod-sport {
-    font-size: 12px;
-    color: rgba(249,247,242,0.4);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-  }
-
-  .prod-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .prod-price {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--white);
-  }
-
-  .prod-price span {
-    font-size: 13px;
-    color: var(--gray-mid);
-    font-weight: 400;
-    margin-left: 3px;
-  }
-
-  .add-btn {
-    background: var(--red);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    width: 32px; height: 32px;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s;
-    font-weight: 300;
-  }
-  .add-btn:hover { background: var(--red-dark); }
-
-  .custom-section {
-    max-width: 100%;
-    padding: 80px 0;
-    background: #111;
-    margin: 0;
-    position: relative;
-    z-index: 10;
-  }
-
-  .custom-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 40px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-  }
-
-  .custom-visual {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 20px;
-  }
-
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-  .form-group.full { grid-column: span 2; }
-
-  label {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: rgba(249,247,242,0.5);
-  }
-
-  input, select, textarea {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 5px;
-    color: var(--white);
-    font-family: 'Barlow', sans-serif;
-    font-size: 15px;
-    padding: 11px 14px;
-    outline: none;
-    transition: border-color 0.2s;
-    width: 100%;
-  }
-
-  input:focus, select:focus, textarea:focus { border-color: var(--red); }
-  select option { background: #222; }
-  textarea { resize: vertical; min-height: 100px; }
-
-  .features-wrap { position: relative; z-index: 10; background: transparent; }
-
-  .feat-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-  }
-
-  .feat-card {
-    padding: 28px 24px;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 8px;
-  }
-
-  .feat-icon {
-    width: 40px; height: 40px;
-    background: rgba(200,25,26,0.15);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 16px;
-    font-size: 20px;
-  }
-
-  .feat-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: var(--white);
-    margin-bottom: 8px;
-  }
-
-  .feat-text {
-    font-size: 14px;
-    line-height: 1.6;
-    color: rgba(249,247,242,0.5);
-  }
-
-  .filter-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-
-  .filter-btn {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 8px 18px;
-    border-radius: 4px;
-    border: 1px solid rgba(255,255,255,0.15);
-    background: transparent;
-    color: rgba(249,247,242,0.6);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  .filter-btn:hover, .filter-btn.active {
-    background: var(--red);
-    border-color: var(--red);
-    color: white;
-  }
-
-  footer {
-    position: relative;
-    z-index: 10;
-    background: #080808;
-    border-top: 1px solid rgba(255,255,255,0.07);
-    padding: 60px 40px 32px;
-  }
-
-  .footer-grid {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 48px;
-    margin-bottom: 48px;
-  }
-
-  .footer-brand-desc {
-    font-size: 14px;
-    line-height: 1.7;
-    color: rgba(249,247,242,0.4);
-    margin-top: 14px;
-    max-width: 280px;
-  }
-
-  .footer-col-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(249,247,242,0.4);
-    margin-bottom: 16px;
-  }
-
-  .footer-links { list-style: none; }
-  .footer-links li { margin-bottom: 10px; }
-  .footer-links a {
-    font-size: 14px;
-    color: rgba(249,247,242,0.6);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .footer-links a:hover { color: var(--white); }
-
-  .footer-bottom {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 24px;
-    border-top: 1px solid rgba(255,255,255,0.07);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 13px;
-    color: rgba(249,247,242,0.3);
-  }
-
-  .full-divider {
-    width: 100%;
-    height: 1px;
-    background: rgba(255,255,255,0.06);
-    position: relative;
-    z-index: 10;
-  }
-
-  .fade-up {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .fade-up.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  @media (max-width: 900px) {
-    .cat-grid { grid-template-columns: 1fr 1fr; }
-    .cat-card.wide { grid-column: span 1; aspect-ratio: 3/4; }
-    .prod-grid { grid-template-columns: repeat(2, 1fr); }
-    .feat-grid { grid-template-columns: repeat(2, 1fr); }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-    .custom-inner { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-    section { padding: 60px 20px; }
-    .hero-stats { gap: 24px; }
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0d0d0d;
+  --white: #f9f7f2;
+  --red: #c8191a;
+  --red-dark: #8f0e0e;
+  --gold: #e8a020;
+  --gray: #3a3a3a;
+  --gray-light: #e4e1d8;
+  --gray-mid: #8a8680;
+  --card-bg: #161616;
+  --nav-h: 70px;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Barlow', sans-serif; background: var(--ink); color: var(--white); overflow-x: hidden; }
+
+/* ── BACKGROUND ── */
+.jersey-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; background: #0d0d0d; }
+.jersey-row { position: absolute; top: 0; left: 0; right: 0; display: flex; gap: 0; opacity: 0.13; }
+.jersey-row:nth-child(2) { top: 320px; opacity: 0.09; transform: translateX(60px); }
+.jersey-row:nth-child(3) { top: 640px; opacity: 0.06; transform: translateX(-40px); }
+.jersey-item { flex: 0 0 auto; width: 160px; display: flex; flex-direction: column; align-items: center; padding-top: 10px; }
+.hanger { width: 70px; height: 24px; }
+.hanger svg { width: 100%; height: 100%; }
+.jersey-shape { width: 130px; height: 160px; }
+.jersey-shape svg { width: 100%; height: 100%; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+  background: rgba(13,13,13,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; z-index: 100;
+}
+.logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--white); display: flex; align-items: center; gap: 10px; cursor:pointer; }
+.logo-dot { width: 10px; height: 10px; background: var(--red); border-radius: 50%; display: inline-block; }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links a { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(249,247,242,0.65); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--white); }
+.nav-cta { background: var(--red) !important; color: var(--white) !important; padding: 8px 20px; border-radius: 4px; font-weight: 700 !important; }
+.nav-cta:hover { background: var(--red-dark) !important; }
+.nav-cart-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px; padding: 7px 18px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background 0.2s; }
+.nav-cart-btn:hover { background: rgba(255,255,255,0.14); }
+.cart-badge { background: var(--red); color: white; font-size: 11px; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+/* ── HERO ── */
+.hero { position: relative; z-index: 10; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: calc(var(--nav-h) + 40px) 20px 60px; }
+.hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--red); margin-bottom: 16px; }
+.hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(64px, 10vw, 130px); line-height: 0.9; letter-spacing: 4px; color: var(--white); margin-bottom: 24px; }
+.hero-title span { color: var(--red); }
+.hero-sub { font-size: 17px; font-weight: 300; color: rgba(249,247,242,0.6); max-width: 500px; line-height: 1.7; margin-bottom: 40px; }
+.hero-btns { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.btn-primary { background: var(--red); color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 14px 36px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; transition: background 0.2s, transform 0.15s; }
+.btn-primary:hover { background: var(--red-dark); transform: translateY(-1px); }
+.btn-outline { background: transparent; color: var(--white); font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 13px 36px; border: 1.5px solid rgba(255,255,255,0.3); border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; transition: border-color 0.2s, transform 0.15s; }
+.btn-outline:hover { border-color: var(--white); transform: translateY(-1px); }
+.hero-stats { display: flex; gap: 48px; margin-top: 64px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px; }
+.stat { text-align: center; }
+.stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 44px; line-height: 1; color: var(--white); letter-spacing: 2px; }
+.stat-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: rgba(249,247,242,0.4); margin-top: 4px; }
+
+/* ── MARQUEE ── */
+.marquee-wrap { position: relative; z-index: 10; background: var(--red); padding: 12px 0; overflow: hidden; white-space: nowrap; }
+.marquee-inner { display: inline-flex; animation: scroll-left 24s linear infinite; }
+.marquee-item { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; color: rgba(255,255,255,0.9); padding: 0 32px; }
+.marquee-dot { color: rgba(255,255,255,0.4); font-size: 8px; vertical-align: middle; }
+@keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* ── SECTIONS ── */
+section { position: relative; z-index: 10; padding: 80px 40px; max-width: 1200px; margin: 0 auto; }
+.section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 5vw, 58px); letter-spacing: 3px; line-height: 1; color: var(--white); margin-bottom: 40px; }
+
+/* ── CATEGORIES ── */
+.cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.cat-card { border-radius: 8px; overflow: hidden; position: relative; cursor: pointer; aspect-ratio: 3/4; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.07); transition: transform 0.25s, border-color 0.25s; }
+.cat-card:hover { transform: translateY(-4px); border-color: rgba(200,25,26,0.5); }
+.cat-card.wide { grid-column: span 2; aspect-ratio: 16/9; }
+.cat-svg-wrap { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: absolute; inset: 0; }
+.cat-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 30%, rgba(0,0,0,0.1) 70%); }
+.cat-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; }
+.cat-name { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; color: var(--white); line-height: 1; }
+.cat-count { font-size: 13px; color: rgba(249,247,242,0.5); margin-top: 4px; }
+.cat-badge { position: absolute; top: 14px; right: 14px; background: var(--red); color: white; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; border-radius: 3px; }
+
+/* ── PRODUCTS ── */
+.filter-bar { display: flex; gap: 10px; margin-bottom: 32px; flex-wrap: wrap; }
+.filter-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 18px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: rgba(249,247,242,0.6); cursor: pointer; transition: all 0.15s; }
+.filter-btn:hover, .filter-btn.active { background: var(--red); border-color: var(--red); color: white; }
+.prod-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.prod-card { background: var(--card-bg); border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); transition: transform 0.2s, border-color 0.2s; }
+.prod-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.15); }
+.prod-img { height: 200px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.prod-badge { position: absolute; top: 10px; left: 10px; background: var(--red); color: white; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
+.prod-info { padding: 14px 16px 16px; }
+.prod-name { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; color: var(--white); margin-bottom: 3px; }
+.prod-sport { font-size: 11px; color: rgba(249,247,242,0.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+
+/* Size selector */
+.size-label { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: rgba(249,247,242,0.4); margin-bottom: 6px; }
+.size-row { display: flex; gap: 5px; margin-bottom: 12px; flex-wrap: wrap; }
+.size-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; padding: 4px 9px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: rgba(249,247,242,0.6); cursor: pointer; transition: all 0.15s; }
+.size-btn:hover { border-color: rgba(255,255,255,0.4); color: var(--white); }
+.size-btn.selected { background: var(--red); border-color: var(--red); color: white; }
+
+.prod-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 4px; }
+.prod-price { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; color: var(--white); }
+.prod-price .orig { font-size: 13px; color: var(--gray-mid); font-weight: 400; text-decoration: line-through; margin-left: 4px; }
+.add-btn { background: var(--red); color: white; border: none; border-radius: 4px; width: 34px; height: 34px; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; font-weight: 300; }
+.add-btn:hover { background: var(--red-dark); }
+
+/* ── FEATURES ── */
+.features-wrap { position: relative; z-index: 10; background: transparent; }
+.feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.feat-card { padding: 28px 24px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; }
+.feat-icon { width: 40px; height: 40px; background: rgba(200,25,26,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 20px; }
+.feat-title { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.feat-text { font-size: 14px; line-height: 1.6; color: rgba(249,247,242,0.5); }
+
+/* ── CUSTOM SECTION ── */
+.custom-section { max-width: 100%; padding: 80px 0; background: #111; margin: 0; position: relative; z-index: 10; }
+.custom-inner { max-width: 1200px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.custom-visual { display: flex; align-items: center; justify-content: center; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group.full { grid-column: span 2; }
+label { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(249,247,242,0.5); }
+input, select, textarea { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 5px; color: var(--white); font-family: 'Barlow', sans-serif; font-size: 15px; padding: 11px 14px; outline: none; transition: border-color 0.2s; width: 100%; }
+input:focus, select:focus, textarea:focus { border-color: var(--red); }
+select option { background: #222; }
+textarea { resize: vertical; min-height: 100px; }
+
+/* ── ORDER TRACKING ── */
+.track-section { position: relative; z-index: 10; background: #0a0a0a; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
+.track-inner { max-width: 700px; margin: 0 auto; padding: 80px 40px; text-align: center; }
+.track-input-row { display: flex; gap: 10px; margin-top: 28px; }
+.track-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 5px; color: var(--white); font-family: 'Barlow', sans-serif; font-size: 15px; padding: 13px 18px; outline: none; transition: border-color 0.2s; }
+.track-input:focus { border-color: var(--red); }
+.track-result { margin-top: 28px; display: none; }
+.track-card { background: #161616; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 24px; text-align: left; }
+.track-order-id { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+.track-steps { display: flex; gap: 0; margin-top: 20px; position: relative; }
+.track-steps::before { content: ''; position: absolute; top: 14px; left: 14px; right: 14px; height: 2px; background: rgba(255,255,255,0.1); z-index: 0; }
+.track-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; position: relative; z-index: 1; }
+.track-dot { width: 28px; height: 28px; border-radius: 50%; background: #2a2a2a; border: 2px solid rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.3s; }
+.track-dot.done { background: var(--red); border-color: var(--red); }
+.track-dot.active { background: var(--gold); border-color: var(--gold); animation: pulse-dot 1.5s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100%{box-shadow:0 0 0 0 rgba(232,160,32,0.4)} 50%{box-shadow:0 0 0 8px rgba(232,160,32,0)} }
+.track-step-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: rgba(249,247,242,0.4); text-align: center; }
+.track-step-label.active { color: var(--gold); }
+.track-step-label.done { color: rgba(249,247,242,0.7); }
+
+/* ── FOOTER ── */
+footer { position: relative; z-index: 10; background: #080808; border-top: 1px solid rgba(255,255,255,0.07); padding: 60px 40px 32px; }
+.footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footer-brand-desc { font-size: 14px; line-height: 1.7; color: rgba(249,247,242,0.4); margin-top: 14px; max-width: 280px; }
+.footer-col-title { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(249,247,242,0.4); margin-bottom: 16px; }
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a { font-size: 14px; color: rgba(249,247,242,0.6); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--white); }
+.footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: rgba(249,247,242,0.3); }
+.full-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.06); position: relative; z-index: 10; }
+
+/* ── CART DRAWER ── */
+.cart-drawer { position: fixed; top: 0; right: -420px; width: 380px; height: 100%; background: #111; border-left: 1px solid rgba(255,255,255,0.1); z-index: 9999; transition: right 0.3s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; }
+.cart-drawer.open { right: 0; }
+.cart-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.cart-header h2 { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; color: var(--white); }
+.cart-close { background: none; border: none; color: rgba(249,247,242,0.5); font-size: 26px; cursor: pointer; line-height: 1; transition: color 0.2s; }
+.cart-close:hover { color: var(--white); }
+.cart-body { flex: 1; overflow-y: auto; padding: 16px 24px; }
+.cart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; color: rgba(249,247,242,0.3); font-size: 15px; gap: 12px; }
+.cart-item { display: flex; gap: 12px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.cart-item-color { width: 44px; height: 52px; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 2px; }
+.cart-item-meta { font-size: 12px; color: rgba(249,247,242,0.4); margin-bottom: 8px; }
+.cart-item-qty { display: flex; align-items: center; gap: 8px; }
+.qty-btn { background: rgba(255,255,255,0.08); border: none; color: var(--white); width: 26px; height: 26px; border-radius: 4px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+.qty-btn:hover { background: rgba(255,255,255,0.15); }
+.qty-num { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; min-width: 20px; text-align: center; }
+.cart-item-price { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; color: var(--white); white-space: nowrap; }
+.cart-remove { background: none; border: none; color: rgba(249,247,242,0.25); cursor: pointer; font-size: 18px; padding: 2px; transition: color 0.2s; }
+.cart-remove:hover { color: var(--red); }
+.cart-footer { padding: 16px 24px 24px; border-top: 1px solid rgba(255,255,255,0.08); }
+.cart-total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.cart-total-label { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(249,247,242,0.5); }
+.cart-total-price { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--white); }
+.cart-checkout-btn { width: 100%; background: var(--red); color: white; border: none; padding: 14px; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+.cart-checkout-btn:hover { background: var(--red-dark); }
+
+/* ── FLOATING CART ── */
+.float-cart { position: fixed; bottom: 28px; right: 28px; background: var(--red); color: white; padding: 13px 22px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 20px rgba(200,25,26,0.4); font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 1px; z-index: 9998; border: none; display: flex; align-items: center; gap: 8px; transition: transform 0.2s, box-shadow 0.2s; }
+.float-cart:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(200,25,26,0.5); }
+
+/* ── CHECKOUT MODAL ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal-box { background: #1a1a1a; color: white; padding: 32px; border-radius: 10px; width: 90%; max-width: 420px; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+.modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; color: rgba(249,247,242,0.4); font-size: 26px; cursor: pointer; line-height: 1; }
+.modal-close:hover { color: var(--white); }
+.modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px; color: var(--red); border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px; margin-bottom: 20px; }
+.modal-step { display: none; }
+.modal-step.active { display: block; }
+.modal-label { font-size: 13px; color: rgba(249,247,242,0.5); margin-bottom: 14px; line-height: 1.6; }
+.modal-input { width: 100%; background: #222; border: 1px solid #444; color: white; font-family: 'Barlow', sans-serif; font-size: 15px; padding: 12px 14px; border-radius: 4px; outline: none; margin-bottom: 14px; box-sizing: border-box; transition: border-color 0.2s; }
+.modal-input:focus { border-color: var(--red); }
+.modal-btn { width: 100%; border: none; padding: 13px; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 4px; cursor: pointer; margin-bottom: 10px; transition: opacity 0.2s; }
+.modal-btn:hover { opacity: 0.88; }
+.modal-btn.red { background: var(--red); color: white; }
+.modal-btn.green { background: #25D366; color: white; }
+.modal-btn.white { background: #fff; color: #000; }
+.modal-success { background: rgba(37,211,102,0.15); border: 1px solid rgba(37,211,102,0.3); color: #25D366; padding: 10px 14px; border-radius: 4px; font-size: 14px; margin-bottom: 16px; text-align: center; }
+
+/* ── SIZE MODAL ── */
+.size-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10001; align-items: center; justify-content: center; }
+.size-modal-overlay.open { display: flex; }
+.size-modal { background: #1a1a1a; border-radius: 10px; width: 90%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
+.size-modal-header { padding: 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; }
+.size-modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; }
+.size-modal-body { padding: 24px; }
+.size-modal-product { font-size: 14px; color: rgba(249,247,242,0.5); margin-bottom: 20px; }
+.size-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+.size-option { padding: 12px 0; text-align: center; border: 1.5px solid rgba(255,255,255,0.15); border-radius: 5px; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.15s; color: rgba(249,247,242,0.7); }
+.size-option:hover { border-color: rgba(255,255,255,0.4); color: var(--white); }
+.size-option.picked { background: var(--red); border-color: var(--red); color: white; }
+.size-confirm-btn { width: 100%; background: var(--red); color: white; border: none; padding: 14px; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border-radius: 4px; cursor: pointer; }
+.size-confirm-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── ANIMATIONS ── */
+.fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .cat-grid { grid-template-columns: 1fr 1fr; }
+  .cat-card.wide { grid-column: span 1; aspect-ratio: 3/4; }
+  .prod-grid { grid-template-columns: repeat(2, 1fr); }
+  .feat-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .custom-inner { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  section { padding: 60px 20px; }
+  .hero-stats { gap: 24px; }
+  .cart-drawer { width: 100%; right: -100%; }
+  .track-input-row { flex-direction: column; }
+}
 </style>
 </head>
 <body>
 
+<!-- Background Jerseys -->
 <div class="jersey-bg">
   <div class="jersey-row" id="row1"></div>
   <div class="jersey-row" id="row2"></div>
   <div class="jersey-row" id="row3"></div>
 </div>
 
+<!-- NAV -->
 <nav>
-  <div class="logo">
-    <span class="logo-dot"></span>
-    Sport Island  </div>
+  <div class="logo" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <span class="logo-dot"></span>Sport Island
+  </div>
   <ul class="nav-links">
     <li><a href="#shop">Shop</a></li>
     <li><a href="#categories">Categories</a></li>
+    <li><a href="#track">Track Order</a></li>
     <li><a href="#custom">Custom Order</a></li>
     <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
   </ul>
+  <button class="nav-cart-btn" onclick="openCart()">
+    🛒 Cart <span class="cart-badge" id="nav-cart-count">0</span>
+  </button>
 </nav>
 
+<!-- HERO -->
 <div class="hero">
   <p class="hero-eyebrow fade-up">Nepal's #1 Jersey Supplier</p>
   <h1 class="hero-title fade-up">THE KIT<br>THAT WINS <span>.</span></h1>
-  <p class="hero-sub fade-up">Sports jerseys, custom prints & team uniforms. Built for performance, made to stand out.</p>
+  <p class="hero-sub fade-up">Football jerseys, custom prints & team uniforms. Built for performance, made to stand out.</p>
   <div class="hero-btns fade-up">
     <a href="#shop" class="btn-primary">Shop Now</a>
     <a href="#custom" class="btn-outline">Custom Order</a>
   </div>
   <div class="hero-stats fade-up">
-    <div class="stat">
-      <div class="stat-num">500+</div>
-      <div class="stat-label">Designs</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">1200+</div>
-      <div class="stat-label">Teams Kitted</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">7</div>
-      <div class="stat-label">Sports</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">48hr</div>
-      <div class="stat-label">Express</div>
-    </div>
+    <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Designs</div></div>
+    <div class="stat"><div class="stat-num">1200+</div><div class="stat-label">Teams Kitted</div></div>
+    <div class="stat"><div class="stat-num">7</div><div class="stat-label">Sports</div></div>
+    <div class="stat"><div class="stat-num">48hr</div><div class="stat-label">Express</div></div>
   </div>
 </div>
 
+<!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-inner" id="marquee"></div>
 </div>
 
+<!-- CATEGORIES -->
 <section id="categories">
   <p class="section-label fade-up">Browse by Sport</p>
   <h2 class="section-title fade-up">Shop Categories</h2>
   <div class="cat-grid fade-up">
-
-    <div class="cat-card wide" style="background: linear-gradient(135deg, #0f1a2e 0%, #1a1a1a 100%);">
+    <div class="cat-card wide" style="background:linear-gradient(135deg,#0f1a2e 0%,#1a1a1a 100%);" onclick="filterProds('football',document.querySelector('[data-filter=football]'))">
       <div class="cat-svg-wrap">
-        <svg width="320" height="220" viewBox="0 0 320 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="320" height="220" viewBox="0 0 320 220" fill="none">
           <rect x="110" y="10" width="100" height="12" rx="6" fill="#c8191a" opacity="0.8"/>
           <path d="M90 22 L60 50 L80 55 L80 200 L240 200 L240 55 L260 50 L230 22 L210 35 L210 22 L110 22 L110 35 Z" fill="#1e3d7a" stroke="#2a5aaa" stroke-width="1.5"/>
           <path d="M110 22 L110 35 L210 35 L210 22 Z" fill="#c8191a"/>
@@ -722,181 +323,112 @@
       </div>
       <div class="cat-overlay"></div>
       <div class="cat-badge">Best Seller</div>
-      <div class="cat-info">
-        <div class="cat-name">Football</div>
-        <div class="cat-count">180+ designs available</div>
-      </div>
+      <div class="cat-info"><div class="cat-name">Football</div><div class="cat-count">180+ designs available</div></div>
     </div>
-
-    <div class="cat-card" style="background: linear-gradient(135deg, #0e2a1a 0%, #1a1a1a 100%);">
-      <div class="cat-svg-wrap">
-        <svg width="160" height="200" viewBox="0 0 160 200" fill="none">
-          <path d="M40 30 L20 55 L35 60 L35 185 L125 185 L125 60 L140 55 L120 30 L105 42 L105 30 L55 30 L55 42 Z" fill="#1a472a" stroke="#2d7a45" stroke-width="1.5"/>
-          <path d="M55 30 L55 42 L105 42 L105 30 Z" fill="#f5f5f5"/>
-          <path d="M35 90 L125 90" stroke="#2d7a45" stroke-width="1" opacity="0.5"/>
-          <text x="80" y="145" text-anchor="middle" fill="white" font-size="38" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">18</text>
-          <text x="80" y="168" text-anchor="middle" fill="white" font-size="12" font-family="Barlow Condensed, sans-serif" opacity="0.6">CRICKET</text>
-        </svg>
-      </div>
+    <div class="cat-card" style="background:linear-gradient(135deg,#0e2a1a 0%,#1a1a1a 100%);">
+      <div class="cat-svg-wrap"><svg width="160" height="200" viewBox="0 0 160 200" fill="none"><path d="M40 30 L20 55 L35 60 L35 185 L125 185 L125 60 L140 55 L120 30 L105 42 L105 30 L55 30 L55 42 Z" fill="#1a472a" stroke="#2d7a45" stroke-width="1.5"/><path d="M55 30 L55 42 L105 42 L105 30 Z" fill="#f5f5f5"/><text x="80" y="145" text-anchor="middle" fill="white" font-size="38" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">18</text></svg></div>
       <div class="cat-overlay"></div>
-      <div class="cat-info">
-        <div class="cat-name">Cricket</div>
-        <div class="cat-count">80+ designs</div>
-      </div>
+      <div class="cat-info"><div class="cat-name">Cricket</div><div class="cat-count">80+ designs</div></div>
     </div>
-
-    <div class="cat-card" style="background: linear-gradient(135deg, #2a1500 0%, #1a1a1a 100%);">
-      <div class="cat-svg-wrap">
-        <svg width="160" height="200" viewBox="0 0 160 200" fill="none">
-          <path d="M40 30 L20 55 L35 60 L35 185 L125 185 L125 60 L140 55 L120 30 L105 42 L105 30 L55 30 L55 42 Z" fill="#7a1a1a" stroke="#c42020" stroke-width="1.5"/>
-          <path d="M55 30 L55 42 L105 42 L105 30 Z" fill="#e8a020"/>
-          <path d="M35 90 L125 90 M35 140 L125 140" stroke="#c42020" stroke-width="1" opacity="0.4"/>
-          <text x="80" y="128" text-anchor="middle" fill="white" font-size="38" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">23</text>
-        </svg>
-      </div>
+    <div class="cat-card" style="background:linear-gradient(135deg,#2a1500 0%,#1a1a1a 100%);">
+      <div class="cat-svg-wrap"><svg width="160" height="200" viewBox="0 0 160 200" fill="none"><path d="M40 30 L20 55 L35 60 L35 185 L125 185 L125 60 L140 55 L120 30 L105 42 L105 30 L55 30 L55 42 Z" fill="#7a1a1a" stroke="#c42020" stroke-width="1.5"/><path d="M55 30 L55 42 L105 42 L105 30 Z" fill="#e8a020"/><text x="80" y="128" text-anchor="middle" fill="white" font-size="38" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">23</text></svg></div>
       <div class="cat-overlay"></div>
-      <div class="cat-info">
-        <div class="cat-name">Basketball</div>
-        <div class="cat-count">60+ designs</div>
-      </div>
+      <div class="cat-info"><div class="cat-name">Basketball</div><div class="cat-count">60+ designs</div></div>
     </div>
-
-    <div class="cat-card" style="background: linear-gradient(135deg, #1a1a2e 0%, #1a1a1a 100%);">
-      <div class="cat-svg-wrap">
-        <svg width="160" height="200" viewBox="0 0 160 200" fill="none">
-          <path d="M40 30 L20 55 L35 60 L35 185 L125 185 L125 60 L140 55 L120 30 L105 42 L105 30 L55 30 L55 42 Z" fill="#1a1a6e" stroke="#3030cc" stroke-width="1.5"/>
-          <path d="M55 30 L55 42 L105 42 L105 30 Z" fill="#f0f0f0"/>
-          <path d="M35 75 L125 75 M35 145 L125 145" stroke="#3030cc" stroke-width="1" opacity="0.4"/>
-          <rect x="35" y="75" width="90" height="70" fill="#2020aa" opacity="0.4"/>
-          <text x="80" y="128" text-anchor="middle" fill="white" font-size="38" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">10</text>
-        </svg>
-      </div>
+    <div class="cat-card" style="background:linear-gradient(135deg,#1a1a2e 0%,#1a1a1a 100%);">
+      <div class="cat-svg-wrap"><svg width="160" height="200" viewBox="0 0 160 200" fill="none"><path d="M40 30 L20 55 L35 60 L35 185 L125 185 L125 60 L140 55 L120 30 L105 42 L105 30 L55 30 L55 42 Z" fill="#1a1a6e" stroke="#3030cc" stroke-width="1.5"/><path d="M55 30 L55 42 L105 42 L105 30 Z" fill="#f0f0f0"/><text x="80" y="128" text-anchor="middle" fill="white" font-size="38" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">10</text></svg></div>
       <div class="cat-overlay"></div>
-      <div class="cat-info">
-        <div class="cat-name">Volleyball</div>
-        <div class="cat-count">45+ designs</div>
-      </div>
+      <div class="cat-info"><div class="cat-name">Volleyball</div><div class="cat-count">45+ designs</div></div>
     </div>
-
-    <div class="cat-card" style="background: linear-gradient(135deg, #1f1a00 0%, #1a1a1a 100%);">
-      <div class="cat-svg-wrap">
-        <svg width="160" height="200" viewBox="0 0 160 200" fill="none">
-          <path d="M40 30 L20 55 L35 60 L35 185 L125 185 L125 60 L140 55 L120 30 L105 42 L105 30 L55 30 L55 42 Z" fill="#4a3a00" stroke="#c8950a" stroke-width="1.5"/>
-          <path d="M55 30 L55 42 L105 42 L105 30 Z" fill="#c8950a"/>
-          <text x="80" y="128" text-anchor="middle" fill="white" font-size="38" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">5</text>
-          <text x="80" y="162" text-anchor="middle" fill="#c8950a" font-size="11" font-family="Barlow Condensed, sans-serif" opacity="0.8">FUTSAL</text>
-        </svg>
-      </div>
+    <div class="cat-card" style="background:linear-gradient(135deg,#1f1a00 0%,#1a1a1a 100%);">
+      <div class="cat-svg-wrap"><svg width="160" height="200" viewBox="0 0 160 200" fill="none"><path d="M40 30 L20 55 L35 60 L35 185 L125 185 L125 60 L140 55 L120 30 L105 42 L105 30 L55 30 L55 42 Z" fill="#4a3a00" stroke="#c8950a" stroke-width="1.5"/><path d="M55 30 L55 42 L105 42 L105 30 Z" fill="#c8950a"/><text x="80" y="128" text-anchor="middle" fill="white" font-size="38" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">5</text></svg></div>
       <div class="cat-overlay"></div>
-      <div class="cat-info">
-        <div class="cat-name">Futsal</div>
-        <div class="cat-count">55+ designs</div>
-      </div>
+      <div class="cat-info"><div class="cat-name">Futsal</div><div class="cat-count">55+ designs</div></div>
     </div>
-
-    <div class="cat-card" style="background: linear-gradient(135deg, #001f1a 0%, #1a1a1a 100%);">
-      <div class="cat-svg-wrap">
-        <svg width="160" height="200" viewBox="0 0 160 200" fill="none">
-          <path d="M50 20 L110 20 L115 80 L80 90 L45 80 Z" fill="#0a4a3a" stroke="#0d8a6a" stroke-width="1.5"/>
-          <path d="M50 20 L45 80 L35 85 L30 185 L130 185 L125 85 L115 80 L110 20 Z" fill="#0a4a3a" stroke="#0d8a6a" stroke-width="1.5"/>
-          <text x="80" y="145" text-anchor="middle" fill="white" font-size="28" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">CUSTOM</text>
-        </svg>
-      </div>
+    <div class="cat-card" style="background:linear-gradient(135deg,#001f1a 0%,#1a1a1a 100%);">
+      <div class="cat-svg-wrap"><svg width="160" height="200" viewBox="0 0 160 200" fill="none"><path d="M50 20 L110 20 L115 80 L80 90 L45 80 Z" fill="#0a4a3a" stroke="#0d8a6a" stroke-width="1.5"/><path d="M50 20 L45 80 L35 85 L30 185 L130 185 L125 85 L115 80 L110 20 Z" fill="#0a4a3a" stroke="#0d8a6a" stroke-width="1.5"/><text x="80" y="145" text-anchor="middle" fill="white" font-size="22" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">CUSTOM</text></svg></div>
       <div class="cat-overlay"></div>
-      <div class="cat-info">
-        <div class="cat-name">Custom Print</div>
-        <div class="cat-count">Unlimited designs</div>
-      </div>
+      <div class="cat-info"><div class="cat-name">Custom Print</div><div class="cat-count">Unlimited designs</div></div>
     </div>
-
   </div>
 </section>
 
 <div class="full-divider"></div>
 
-<section id="shop" style="max-width: 1200px;">
+<!-- PRODUCTS -->
+<section id="shop" style="max-width:1200px;">
   <p class="section-label fade-up">Featured Collection</p>
   <h2 class="section-title fade-up">Popular Jerseys</h2>
-
   <div class="filter-bar fade-up">
-    <button class="filter-btn active" onclick="filterProds('all',this)">All</button>
-    <button class="filter-btn" onclick="filterProds('football',this)">Football</button>
-    <button class="filter-btn" onclick="filterProds('cricket',this)">Cricket</button>
-    <button class="filter-btn" onclick="filterProds('basketball',this)">Basketball</button>
-    <button class="filter-btn" onclick="filterProds('custom',this)">Custom</button>
+    <button class="filter-btn active" data-filter="all" onclick="filterProds('all',this)">All</button>
+    <button class="filter-btn" data-filter="football" onclick="filterProds('football',this)">Football</button>
+    <button class="filter-btn" data-filter="cricket" onclick="filterProds('cricket',this)">Cricket</button>
+    <button class="filter-btn" data-filter="basketball" onclick="filterProds('basketball',this)">Basketball</button>
+    <button class="filter-btn" data-filter="custom" onclick="filterProds('custom',this)">Custom</button>
   </div>
-
   <div class="prod-grid fade-up" id="prod-grid"></div>
 </section>
 
 <div class="full-divider"></div>
 
+<!-- FEATURES -->
 <section class="features-wrap" style="max-width:1200px;">
   <div class="feat-grid">
-    <div class="feat-card fade-up">
-      <div class="feat-icon">&#9889;</div>
-      <div class="feat-title">48-Hour Express</div>
-      <div class="feat-text">Rush orders delivered within 48 hours. Team events? We've got you covered.</div>
-    </div>
-    <div class="feat-card fade-up">
-      <div class="feat-icon">&#127912;</div>
-      <div class="feat-title">Full Customization</div>
-      <div class="feat-text">Name, number, logo, color — design every detail exactly the way you want.</div>
-    </div>
-    <div class="feat-card fade-up">
-      <div class="feat-icon">&#127942;</div>
-      <div class="feat-title">Pro Quality Fabric</div>
-      <div class="feat-text">Moisture-wicking, breathable polyester used by professional teams.</div>
-    </div>
-    <div class="feat-card fade-up">
-      <div class="feat-icon">&#128230;</div>
-      <div class="feat-title">Bulk Team Orders</div>
-      <div class="feat-text">Special pricing for orders of 10+ jerseys. Schools, clubs & leagues welcome.</div>
-    </div>
+    <div class="feat-card fade-up"><div class="feat-icon">⚡</div><div class="feat-title">48-Hour Express</div><div class="feat-text">Rush orders delivered within 48 hours. Team events? We've got you covered.</div></div>
+    <div class="feat-card fade-up"><div class="feat-icon">🎨</div><div class="feat-title">Full Customization</div><div class="feat-text">Name, number, logo, color — design every detail exactly the way you want.</div></div>
+    <div class="feat-card fade-up"><div class="feat-icon">🏆</div><div class="feat-title">Pro Quality Fabric</div><div class="feat-text">Moisture-wicking, breathable polyester used by professional teams.</div></div>
+    <div class="feat-card fade-up"><div class="feat-icon">📦</div><div class="feat-title">Bulk Team Orders</div><div class="feat-text">Special pricing for orders of 10+ jerseys. Schools, clubs & leagues welcome.</div></div>
   </div>
 </section>
 
 <div class="full-divider"></div>
 
+<!-- ORDER TRACKING -->
+<div class="track-section" id="track">
+  <div class="track-inner">
+    <p class="section-label fade-up" style="text-align:center;">Real-Time Updates</p>
+    <h2 class="section-title fade-up" style="text-align:center;">Track Your Order</h2>
+    <p style="color:rgba(249,247,242,0.5);font-size:15px;line-height:1.7;" class="fade-up">Enter your order ID below to see the current status of your jersey.</p>
+    <div class="track-input-row fade-up">
+      <input class="track-input" id="track-input" placeholder="e.g. SI-2025-001" type="text" onkeydown="if(event.key==='Enter')trackOrder()">
+      <button class="btn-primary" onclick="trackOrder()" style="white-space:nowrap;">Track Order</button>
+    </div>
+    <div class="track-result" id="track-result">
+      <div class="track-card">
+        <div class="track-order-id" id="track-order-label"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--white);" id="track-product-name"></div>
+            <div style="font-size:13px;color:rgba(249,247,242,0.4);margin-top:2px;" id="track-product-meta"></div>
+          </div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;" id="track-status-badge"></div>
+        </div>
+        <div class="track-steps" id="track-steps"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="full-divider"></div>
+
+<!-- CUSTOM ORDER -->
 <div class="custom-section" id="custom">
   <div class="custom-inner">
     <div>
       <p class="section-label fade-up">Design Your Kit</p>
       <h2 class="section-title fade-up">Custom<br>Order</h2>
-      <p style="font-size:15px; color:rgba(249,247,242,0.5); line-height:1.7; margin-bottom:32px;" class="fade-up">Tell us what you need and we'll create the perfect kit for your team. No minimum order required.</p>
-
+      <p style="font-size:15px;color:rgba(249,247,242,0.5);line-height:1.7;margin-bottom:32px;" class="fade-up">Tell us what you need and we'll create the perfect kit for your team. No minimum order required.</p>
       <div class="form-grid fade-up">
-        <div class="form-group">
-          <label>Your Name</label>
-          <input type="text" placeholder="Full name">
+        <div class="form-group"><label>Your Name</label><input type="text" id="cf-name" placeholder="Full name"></div>
+        <div class="form-group"><label>Phone / WhatsApp</label><input type="tel" id="cf-phone" placeholder="+977 98..."></div>
+        <div class="form-group"><label>Sport Type</label>
+          <select id="cf-sport"><option>Football</option><option>Cricket</option><option>Basketball</option><option>Volleyball</option><option>Futsal</option><option>Other</option></select>
         </div>
-        <div class="form-group">
-          <label>Phone / WhatsApp</label>
-          <input type="tel" placeholder="+977 98...">
-        </div>
-        <div class="form-group">
-          <label>Sport Type</label>
-          <select>
-            <option>Football</option>
-            <option>Cricket</option>
-            <option>Basketball</option>
-            <option>Volleyball</option>
-            <option>Futsal</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Quantity</label>
-          <input type="number" placeholder="e.g. 22" min="1">
-        </div>
-        <div class="form-group full">
-          <label>Design Notes</label>
-          <textarea placeholder="Colors, names, numbers, logo description..."></textarea>
-        </div>
+        <div class="form-group"><label>Quantity</label><input type="number" id="cf-qty" placeholder="e.g. 22" min="1"></div>
+        <div class="form-group full"><label>Design Notes</label><textarea id="cf-notes" placeholder="Colors, names, numbers, logo description..."></textarea></div>
       </div>
-      <button class="btn-primary fade-up" style="width:100%;" onclick="alert('Order request sent! We will contact you on WhatsApp soon.')">Send Order Request &#8594;</button>
+      <button class="btn-primary fade-up" style="width:100%;" onclick="sendCustomOrder()">Send Order Request via WhatsApp →</button>
     </div>
-
     <div class="custom-visual fade-up">
       <svg width="340" height="420" viewBox="0 0 340 420" fill="none">
         <line x1="170" y1="20" x2="170" y2="60" stroke="#666" stroke-width="2"/>
@@ -904,35 +436,30 @@
         <circle cx="170" cy="20" r="6" fill="none" stroke="#888" stroke-width="2"/>
         <path d="M100 60 L60 100 L90 115 L90 380 L250 380 L250 115 L280 100 L240 60 L215 75 L215 60 L125 60 L125 75 Z" fill="#c8191a" stroke="#a01010" stroke-width="2"/>
         <path d="M125 60 L125 75 L215 75 L215 60 Z" fill="#f9f7f2" opacity="0.9"/>
-        <path d="M125 60 Q170 90 215 60" fill="#e0e0e0"/>
         <path d="M90 115 L90 380" stroke="#a01010" stroke-width="12" opacity="0.5"/>
         <path d="M250 115 L250 380" stroke="#a01010" stroke-width="12" opacity="0.5"/>
-        <path d="M155 75 L155 380 M185 75 L185 380" stroke="white" stroke-width="2" opacity="0.15"/>
         <text x="170" y="260" text-anchor="middle" fill="white" font-size="90" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.95">9</text>
         <text x="170" y="310" text-anchor="middle" fill="white" font-size="22" font-weight="700" font-family="Barlow Condensed, sans-serif" letter-spacing="4" opacity="0.85">YOUR NAME</text>
-        <ellipse cx="170" cy="220" rx="60" ry="80" fill="white" opacity="0.04"/>
       </svg>
     </div>
   </div>
 </div>
 
+<!-- FOOTER -->
 <footer id="contact">
   <div class="footer-grid">
     <div>
-      <div class="logo" style="font-size:24px;">
-        <span class="logo-dot"></span>
-        Sport Island
-      </div>
+      <div class="logo" style="font-size:24px;"><span class="logo-dot"></span> Sport Island</div>
       <p class="footer-brand-desc">Nepal's trusted jersey supplier for sports teams, schools, and clubs since 2015. Quality you can feel, speed you can count on.</p>
     </div>
     <div>
       <div class="footer-col-title">Shop</div>
       <ul class="footer-links">
-        <li><a href="#">Football Jerseys</a></li>
-        <li><a href="#">Cricket Kits</a></li>
-        <li><a href="#">Basketball</a></li>
-        <li><a href="#">Volleyball</a></li>
-        <li><a href="#">Custom Print</a></li>
+        <li><a href="#shop">Football Jerseys</a></li>
+        <li><a href="#shop">Cricket Kits</a></li>
+        <li><a href="#shop">Basketball</a></li>
+        <li><a href="#shop">Volleyball</a></li>
+        <li><a href="#custom">Custom Print</a></li>
       </ul>
     </div>
     <div>
@@ -947,309 +474,355 @@
     <div>
       <div class="footer-col-title">Contact</div>
       <ul class="footer-links">
-        <li><a href="#">WhatsApp Us</a></li>
-        <li><a href="#">Kathmandu Store</a></li>
-        <li><a href="#">sportisland@gmail.com</a></li>
-        <li><a href="#">+977 9749455808</a></li>
+        <li><a href="https://wa.me/9779814174991" target="_blank">WhatsApp Us</a></li>
+        <li><a href="#contact">Kathmandu Store</a></li>
+        <li><a href="mailto:sportisland@gmail.com">sportisland@gmail.com</a></li>
+        <li><a href="tel:+9779814174991">+977 9814174991</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>&copy; 2025 Sport Island. All rights reserved.</span>
+    <span>© 2025 Sport Island. All rights reserved.</span>
     <span>Kathmandu, Nepal</span>
   </div>
 </footer>
 
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <h2>Your Cart</h2>
+    <button class="cart-close" onclick="closeCart()">×</button>
+  </div>
+  <div class="cart-body" id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-price" id="cart-total">Rs 0</span>
+    </div>
+    <button class="cart-checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<!-- FLOATING CART -->
+<button class="float-cart" id="float-cart" onclick="openCart()">🛒 Cart (<span id="float-count">0</span>)</button>
+
+<!-- SIZE PICKER MODAL -->
+<div class="size-modal-overlay" id="size-modal">
+  <div class="size-modal">
+    <div class="size-modal-header">
+      <span class="size-modal-title">Select Size</span>
+      <button class="cart-close" onclick="closeSizeModal()">×</button>
+    </div>
+    <div class="size-modal-body">
+      <div class="size-modal-product" id="size-modal-product"></div>
+      <div class="size-grid" id="size-grid"></div>
+      <button class="size-confirm-btn" id="size-confirm-btn" onclick="confirmSize()" disabled>Add to Cart</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeCheckout()">×</button>
+    <div class="modal-title">Secure Checkout</div>
+
+    <div class="modal-step active" id="step-phone">
+      <p class="modal-label">Enter your WhatsApp number to verify your order via OTP.</p>
+      <input class="modal-input" type="tel" id="checkout-phone" placeholder="+977 9814174991">
+      <button class="modal-btn red" onclick="sendOtp()">Send Verification Code</button>
+    </div>
+
+    <div class="modal-step" id="step-otp">
+      <p class="modal-label">We sent a 6-digit code to your phone. Enter it below:</p>
+      <input class="modal-input" type="text" id="checkout-otp" placeholder="6-digit OTP" style="letter-spacing:4px;text-align:center;">
+      <button class="modal-btn red" onclick="verifyOtp()">Verify & Continue</button>
+    </div>
+
+    <div class="modal-step" id="step-payment">
+      <div class="modal-success">✓ Phone number verified!</div>
+      <p class="modal-label">Select your payment method to complete your order:</p>
+      <button class="modal-btn green" onclick="payWhatsApp()">💬 Pay via WhatsApp Order Desk</button>
+      <button class="modal-btn white" onclick="alert('Card payment demo — integrate your payment gateway here.')">💳 Pay with Card (Demo)</button>
+    </div>
+
+    <div id="recaptcha-container"></div>
+  </div>
+</div>
+
 <script>
+// ── JERSEY BACKGROUND ──
 const jerseyColors = [
   ['#1e3d7a','#c8191a'],['#1a472a','#f5f5f5'],['#7a1a1a','#e8a020'],
   ['#1a1a6e','#f0f0f0'],['#2a1a00','#e8a020'],['#0a4a3a','#f0f0f0'],
   ['#2d1a4a','#9b59b6'],['#0a2a4a','#17a2b8'],
 ];
-
-function makeJerseySVG(c1, c2, num) {
+function makeJerseySVG(c1,c2,num){
   return '<svg width="120" height="155" viewBox="0 0 120 155" fill="none">'
-    + '<path d="M35 10 L18 35 L32 40 L32 145 L88 145 L88 40 L102 35 L85 10 L75 18 L75 10 L45 10 L45 18 Z" fill="' + c1 + '" stroke="' + c2 + '" stroke-width="1"/>'
-    + '<path d="M45 10 L45 18 L75 18 L75 10 Z" fill="' + c2 + '" opacity="0.9"/>'
-    + '<text x="60" y="100" text-anchor="middle" fill="white" font-size="32" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.85">' + num + '</text>'
-    + '</svg>';
+    +'<path d="M35 10 L18 35 L32 40 L32 145 L88 145 L88 40 L102 35 L85 10 L75 18 L75 10 L45 10 L45 18 Z" fill="'+c1+'" stroke="'+c2+'" stroke-width="1"/>'
+    +'<path d="M45 10 L45 18 L75 18 L75 10 Z" fill="'+c2+'" opacity="0.9"/>'
+    +'<text x="60" y="100" text-anchor="middle" fill="white" font-size="32" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.85">'+num+'</text>'
+    +'</svg>';
 }
-
-function makeHangerSVG() {
+function makeHangerSVG(){
   return '<svg width="70" height="24" viewBox="0 0 70 24" fill="none">'
-    + '<line x1="35" y1="0" x2="35" y2="10" stroke="#555" stroke-width="1.5"/>'
-    + '<path d="M10 20 Q35 8 60 20" stroke="#666" stroke-width="1.5" fill="none"/>'
-    + '<circle cx="35" cy="0" r="3" fill="none" stroke="#555" stroke-width="1.5"/>'
-    + '</svg>';
+    +'<line x1="35" y1="0" x2="35" y2="10" stroke="#555" stroke-width="1.5"/>'
+    +'<path d="M10 20 Q35 8 60 20" stroke="#666" stroke-width="1.5" fill="none"/>'
+    +'<circle cx="35" cy="0" r="3" fill="none" stroke="#555" stroke-width="1.5"/>'
+    +'</svg>';
 }
-
-['row1','row2','row3'].forEach(function(id, ri) {
-  var row = document.getElementById(id);
-  var nums = [7,23,10,9,18,5,3,15,1,8,11,4,6,2,99,77];
-  for (var i = 0; i < 12; i++) {
-    var ci = (i + ri * 3) % jerseyColors.length;
-    var c1 = jerseyColors[ci][0], c2 = jerseyColors[ci][1];
-    var num = nums[(i + ri*4) % nums.length];
-    var div = document.createElement('div');
-    div.className = 'jersey-item';
-    div.innerHTML = '<div class="hanger">' + makeHangerSVG() + '</div><div class="jersey-shape">' + makeJerseySVG(c1,c2,num) + '</div>';
+['row1','row2','row3'].forEach(function(id,ri){
+  var row=document.getElementById(id);
+  var nums=[7,23,10,9,18,5,3,15,1,8,11,4,6,2,99,77];
+  for(var i=0;i<12;i++){
+    var ci=(i+ri*3)%jerseyColors.length;
+    var div=document.createElement('div'); div.className='jersey-item';
+    div.innerHTML='<div class="hanger">'+makeHangerSVG()+'</div><div class="jersey-shape">'+makeJerseySVG(jerseyColors[ci][0],jerseyColors[ci][1],nums[(i+ri*4)%nums.length])+'</div>';
     row.appendChild(div);
   }
 });
 
-var marqItems = ['Football Jerseys','Cricket Kits','Basketball Uniforms','Custom Print','Volleyball Kits','Futsal Jerseys','Team Uniforms','School Kits','Express Delivery','Bulk Orders'];
-var m = document.getElementById('marquee');
-var html = '';
-for (var i=0;i<3;i++) marqItems.forEach(function(t){ html += '<span class="marquee-item">'+t+'</span><span class="marquee-item marquee-dot">&#9670;</span>'; });
-m.innerHTML = html;
+// ── MARQUEE ──
+var marqItems=['Football Jerseys','Cricket Kits','Basketball Uniforms','Custom Print','Volleyball Kits','Futsal Jerseys','Team Uniforms','School Kits','Express Delivery','Bulk Orders'];
+var mHtml='';
+for(var i=0;i<3;i++) marqItems.forEach(function(t){ mHtml+='<span class="marquee-item">'+t+'</span><span class="marquee-item marquee-dot">◆</span>'; });
+document.getElementById('marquee').innerHTML=mHtml;
 
+// ── PRODUCTS ──
 var products = [
-  {name:'Club Madrid Away',sport:'football',color:'#c8191a',bg:'#0f1a2e',num:'7',price:'Rs 1,200'},
-  {name:'Nepal Cricket',sport:'cricket',color:'#0d7a3a',bg:'#0e2a1a',num:'18',price:'Rs 1,400'},
-  {name:'Street Hoops',sport:'basketball',color:'#e8a020',bg:'#2a1500',num:'23',price:'Rs 950'},
-  {name:'Thunder Futsal',sport:'football',color:'#c8191a',bg:'#1a0a0a',num:'9',price:'Rs 1,100'},
-  {name:'Pro Cricket V2',sport:'cricket',color:'#f5f5f5',bg:'#1a1a1a',num:'10',price:'Rs 1,500'},
-  {name:'City Hoops Pro',sport:'basketball',color:'#4a90e2',bg:'#0a0f2a',num:'3',price:'Rs 1,050'},
-  {name:'Custom Team Kit',sport:'custom',color:'#9b59b6',bg:'#1a0a2a',num:'&#9733;',price:'From Rs 900'},
-  {name:'Spike Volleyball',sport:'football',color:'#17a2b8',bg:'#001f1a',num:'6',price:'Rs 900'},
+  {id:1, name:'Club Madrid Away',    sport:'football',  color:'#c8191a', bg:'#0f1a2e', num:'7',  price:1200, badge:'Hot'},
+  {id:2, name:'Nepal Cricket Kit',   sport:'cricket',   color:'#0d7a3a', bg:'#0e2a1a', num:'18', price:1400, badge:''},
+  {id:3, name:'Street Hoops',        sport:'basketball',color:'#e8a020', bg:'#2a1500', num:'23', price:950,  badge:''},
+  {id:4, name:'Thunder Futsal',      sport:'football',  color:'#c8191a', bg:'#1a0a0a', num:'9',  price:1100, badge:'New'},
+  {id:5, name:'Pro Cricket V2',      sport:'cricket',   color:'#f5f5f5', bg:'#1a1a1a', num:'10', price:1500, badge:''},
+  {id:6, name:'City Hoops Pro',      sport:'basketball',color:'#4a90e2', bg:'#0a0f2a', num:'3',  price:1050, badge:''},
+  {id:7, name:'Custom Team Kit',     sport:'custom',    color:'#9b59b6', bg:'#1a0a2a', num:'★',  price:900,  badge:'Custom'},
+  {id:8, name:'Spike Volleyball',    sport:'football',  color:'#17a2b8', bg:'#001f1a', num:'6',  price:900,  badge:''},
 ];
+var SIZES = ['XS','S','M','L','XL','XXL'];
 
-// Local Cart State array variables
-var cart = [];
-
-// Local Cart State variables
-var cart = [];
-
-function renderProds(filter) {
-    filter = filter || 'all';
-    var grid = document.getElementById('prod-grid');
-    var filtered = filter === 'all' ? products : products.filter(function(p) {
-        return p.sport === filter;
-    });
-
-    grid.innerHTML = filtered.map(function(p, index) {
-        var price = 80.00;
-        return '<div class="prod-card">'
-            + '<div class="prod-img" style="background:' + p.bg + ';">'
-            + (typeof makeHangerSVG === 'function' ? makeHangerSVG() : '') 
-            + '</div>'
-            + '<h3>' + p.name + '</h3>'
-            + '<p>Sport: ' + p.sport + '</p>'
-            + '<p>Price: $' + price.toFixed(2) + '</p>'
-            + '<button class="btn buy-btn" style="background:#ff4d4d; color:white; border:none; padding:8px 15px; cursor:pointer; font-weight:bold; width:100%;" onclick="addLocalItem(\'' + p.name.replace(/'/g, "\\'") + '\', ' + price + ')">'
-            + ' Add to Cart'
-            + '</button>'
-            + '</div>';
-    }).join('');
+function renderProds(filter){
+  filter = filter||'all';
+  var grid = document.getElementById('prod-grid');
+  var list = filter==='all' ? products : products.filter(function(p){ return p.sport===filter; });
+  grid.innerHTML = list.map(function(p){
+    var badgeHtml = p.badge ? '<div class="prod-badge">'+p.badge+'</div>' : '';
+    return '<div class="prod-card">'
+      +'<div class="prod-img" style="background:'+p.bg+';">'
+      +badgeHtml
+      +'<svg width="90" height="118" viewBox="0 0 120 155" fill="none">'
+      +'<path d="M35 10 L18 35 L32 40 L32 145 L88 145 L88 40 L102 35 L85 10 L75 18 L75 10 L45 10 L45 18 Z" fill="'+p.color+'" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>'
+      +'<path d="M45 10 L45 18 L75 18 L75 10 Z" fill="rgba(255,255,255,0.5)"/>'
+      +'<text x="60" y="100" text-anchor="middle" fill="white" font-size="36" font-weight="900" font-family="Bebas Neue, sans-serif" opacity="0.9">'+p.num+'</text>'
+      +'</svg>'
+      +'</div>'
+      +'<div class="prod-info">'
+      +'<div class="prod-name">'+p.name+'</div>'
+      +'<div class="prod-sport">'+p.sport+'</div>'
+      +'<div class="prod-footer">'
+      +'<div class="prod-price">Rs '+p.price.toLocaleString()+'</div>'
+      +'<button class="add-btn" onclick="openSizeModal('+p.id+')" title="Select size & add to cart">+</button>'
+      +'</div>'
+      +'</div>'
+      +'</div>';
+  }).join('');
 }
 
-// Open and Close Cart Actions
-window.toggleCart = function(isOpen) {
-    var drawer = document.getElementById('custom-cart-drawer');
-    drawer.style.right = isOpen ? '0px' : '-400px';
+window.filterProds = function(f,btn){
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  if(btn) btn.classList.add('active');
+  renderProds(f);
 };
-
-// Add product details to your localized list array
-window.addLocalItem = function(name, price) {
-    var existingItem = cart.find(function(item) { return item.name === name; });
-    
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        cart.push({ name: name, price: price, quantity: 1 });
-    }
-    
-    updateCartUI();
-    toggleCart(true); // Automatically slide open cart drawer visually
-};
-
-// Redraw cart item components inside your menu drawer panel UI
-function updateCartUI() {
-    var listContainer = document.getElementById('cart-items-list');
-    var totalDisplay = document.getElementById('cart-total-price');
-    var badgeCount = document.getElementById('floating-cart-count');
-    
-    if (cart.length === 0) {
-        listContainer.innerHTML = '<p style="color:#777; text-align:center; padding-top:40px;">Your cart is empty</p>';
-        totalDisplay.innerText = '$0.00';
-        badgeCount.innerText = '0';
-        return;
-    }
-    
-    var total = 0;
-    var count = 0;
-    
-    listContainer.innerHTML = cart.map(function(item, index) {
-        var itemTotal = item.price * item.quantity;
-        total += itemTotal;
-        count += item.quantity;
-        
-        return '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; background:#222; padding:10px; border-radius:4px;">'
-            + '<div>'
-            + '<h4 style="margin:0 0 5px 0; font-size:14px;">' + item.name + '</h4>'
-            + '<span style="color:#aaa; font-size:12px; font-family:monospace;">' + item.quantity + 'x $' + item.price.toFixed(2) + '</span>'
-            + '</div>'
-            + '<button onclick="removeLocalItem(' + index + ')" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-weight:bold;">Remove</button>'
-            + '</div>';
-    }).join('');
-    
-    totalDisplay.innerText = '$' + total.toFixed(2);
-    badgeCount.innerText = count;
-}
-
-window.removeLocalItem = function(index) {
-    cart.splice(index, 1);
-    updateCartUI();
-};
-
-window.filterProds = function(f, btn) {
-    document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
-    btn.classList.add('active');
-    renderProds(f);
-};
-
 renderProds();
 
+// ── SIZE MODAL ──
+var pendingProduct = null;
+var selectedSize = null;
 
-    var obs = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.fade-up').forEach(function(el){ obs.observe(el); });
-  </script> <div id="custom-cart-drawer" style="position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background: #111; color: white; box-shadow: -5px 0 15px rgba(0,0,0,0.5); z-index: 9999; transition: 0.3s; padding: 20px; box-sizing: border-box; font-family: sans-serif; overflow-y: auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h2 style="margin: 0; font-size: 24px; color: #fff;">Your Cart</h2>
-      <button onclick="toggleCart(false)" style="background: none; border: none; color: #ff4d4d; font-size: 28px; cursor: pointer;">&times;</button>
-    </div>
-    
-    <div id="cart-items-list" style="min-height: 200px; border-bottom: 1px solid #333; padding-bottom: 15px;"></div>
-    
-    <div style="margin-top: 20px;">
-      <h3 style="display: flex; justify-content: space-between; color: #ccc;">Total: <span id="cart-total-price">$0.00</span></h3>
-      <button onclick="openOtpCheckout()" style="width: 100%; background: #ff4d4d; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 15px;">Proceed to Checkout</button>
-    </div>
-  </div>
+window.openSizeModal = function(productId){
+  pendingProduct = products.find(function(p){ return p.id===productId; });
+  selectedSize = null;
+  document.getElementById('size-modal-product').textContent = pendingProduct.name + ' — Rs ' + pendingProduct.price.toLocaleString();
+  var grid = document.getElementById('size-grid');
+  grid.innerHTML = SIZES.map(function(s){
+    return '<div class="size-option" onclick="pickSize(this,\''+s+'\')">'+s+'</div>';
+  }).join('');
+  document.getElementById('size-confirm-btn').disabled = true;
+  document.getElementById('size-modal').classList.add('open');
+};
 
-  <div id="cart-floating-icon" onclick="toggleCart(true)" style="position: fixed; bottom: 30px; right: 30px; background: #ff4d4d; color: white; padding: 15px 20px; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-weight: bold; z-index: 9998; font-family: sans-serif;">
-    🛒 Cart (<span id="floating-cart-count">0</span>)
-  </div>
+window.pickSize = function(el, size){
+  document.querySelectorAll('.size-option').forEach(function(o){ o.classList.remove('picked'); });
+  el.classList.add('picked');
+  selectedSize = size;
+  document.getElementById('size-confirm-btn').disabled = false;
+};
 
-  <div id="checkout-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; justify-content: center; align-items: center; font-family: sans-serif;">
-    <div style="background: #1a1a1a; color: white; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); position: relative; border: 1px solid #333;">
-      <button onclick="closeCheckoutModal()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: #aaa; font-size: 24px; cursor: pointer;">&times;</button>
-      <h2 style="margin-top: 0; color: #ff4d4d; border-bottom: 1px solid #333; padding-bottom: 10px;">Secure Checkout</h2>
-      
-      <div id="phone-step">
-        <p style="color: #ccc; font-size: 14px;">Enter your phone number (with country code) to verify your order via OTP SMS.</p>
-        <input type="tel" id="checkout-phone" placeholder="+1234567890" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px;">
-        <button onclick="sendOtpSms()" style="width: 100%; background: #ff4d4d; color: white; border: none; padding: 12px; font-weight: bold; font-size: 16px; border-radius: 4px; cursor: pointer;">Send Verification Code</button>
-      </div>
+window.closeSizeModal = function(){
+  document.getElementById('size-modal').classList.remove('open');
+  pendingProduct = null; selectedSize = null;
+};
 
-      <div id="otp-step" style="display: none;">
-        <p style="color: #ccc; font-size: 14px; margin-bottom: 5px;">We sent a 6-digit code to your phone. Enter it below:</p>
-        <input type="text" id="checkout-otp" placeholder="6-Digit OTP Code" style="width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 4px; box-sizing: border-box; font-size: 16px; letter-spacing: 4px; text-align: center; margin-bottom: 15px;">
-        <button onclick="verifyOtpSms()" style="width: 100%; background: #25D366; color: white; border: none; padding: 12px; font-weight: bold; font-size: 16px; border-radius: 4px; cursor: pointer;">Verify & View Payment Options</button>
-      </div>
+window.confirmSize = function(){
+  if(!pendingProduct || !selectedSize) return;
+  addToCart(pendingProduct, selectedSize);
+  closeSizeModal();
+  openCart();
+};
 
-      <div id="payment-step" style="display: none; text-align: center;">
-        <div style="background: #25D366; color: white; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; font-size: 14px;">✓ Phone Number Verified!</div>
-        <p style="color: #ccc; font-size: 14px; margin-bottom: 15px;">Select your preferred payment method to complete your Jersey order:</p>
-        <button onclick="completeOrderWithWhatsApp()" style="width: 100%; background: #00E676; color: black; border: none; padding: 12px; font-weight: bold; font-size: 15px; border-radius: 4px; cursor: pointer; margin-bottom: 10px;">
-          💬 Pay via WhatsApp Order Desk
-        </button>
-        <button onclick="alert('Card simulation processed successfully!')" style="width: 100%; background: #ffffff; color: black; border: none; padding: 12px; font-weight: bold; font-size: 15px; border-radius: 4px; cursor: pointer;">
-          💳 Pay with Card (Demo Sandbox)
-        </button>
-      </div>
-      <div id="recaptcha-container" style="margin-top: 10px;"></div>
-    </div>
-  </div>
+// ── CART ──
+var cart = [];
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-    import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+function addToCart(product, size){
+  var key = product.id + '-' + size;
+  var existing = cart.find(function(i){ return i.key===key; });
+  if(existing){ existing.qty++; } else {
+    cart.push({ key:key, id:product.id, name:product.name, size:size, price:product.price, color:product.color, qty:1 });
+  }
+  updateCartUI();
+}
 
-    // ⚠️ PASTE YOUR SECURE CONFIG FROM FIREBASE CONSOLE HERE:
-    const firebaseConfig = {
-      apiKey: "YOUR_PROJECT_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+function updateCartUI(){
+  var total = cart.reduce(function(s,i){ return s+i.price*i.qty; }, 0);
+  var count = cart.reduce(function(s,i){ return s+i.qty; }, 0);
+  document.getElementById('cart-total').textContent = 'Rs ' + total.toLocaleString();
+  document.getElementById('nav-cart-count').textContent = count;
+  document.getElementById('float-count').textContent = count;
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  var body = document.getElementById('cart-body');
+  if(cart.length===0){
+    body.innerHTML = '<div class="cart-empty"><span style="font-size:36px;">🛒</span>Your cart is empty</div>';
+    return;
+  }
+  body.innerHTML = cart.map(function(item, idx){
+    return '<div class="cart-item">'
+      +'<div class="cart-item-color" style="background:'+item.color+'22;border:1px solid '+item.color+'44;">'
+      +'<svg width="28" height="36" viewBox="0 0 120 155" fill="none"><path d="M35 10 L18 35 L32 40 L32 145 L88 145 L88 40 L102 35 L85 10 L75 18 L75 10 L45 10 L45 18 Z" fill="'+item.color+'"/></svg>'
+      +'</div>'
+      +'<div class="cart-item-info">'
+      +'<div class="cart-item-name">'+item.name+'</div>'
+      +'<div class="cart-item-meta">Size: '+item.size+' · Rs '+item.price.toLocaleString()+' each</div>'
+      +'<div class="cart-item-qty">'
+      +'<button class="qty-btn" onclick="changeQty('+idx+',-1)">−</button>'
+      +'<span class="qty-num">'+item.qty+'</span>'
+      +'<button class="qty-btn" onclick="changeQty('+idx+',1)">+</button>'
+      +'</div>'
+      +'</div>'
+      +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">'
+      +'<div class="cart-item-price">Rs '+(item.price*item.qty).toLocaleString()+'</div>'
+      +'<button class="cart-remove" onclick="removeItem('+idx+')" title="Remove">×</button>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
 
-    window.addEventListener('load', function() {
-        window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-            'size': 'invisible'
-        });
-    });
+window.changeQty = function(idx, delta){
+  cart[idx].qty += delta;
+  if(cart[idx].qty <= 0) cart.splice(idx,1);
+  updateCartUI();
+};
 
-    let confirmationResultTracker;
+window.removeItem = function(idx){
+  cart.splice(idx,1);
+  updateCartUI();
+};
 
-    window.openOtpCheckout = function() {
-        if (typeof cart === 'undefined' || cart.length === 0) {
-            alert("Your cart is empty! Add a jersey first.");
-            return;
-        }
-        window.toggleCart(false);
-        document.getElementById('checkout-modal').style.display = 'flex';
-    };
+window.openCart = function(){ document.getElementById('cart-drawer').classList.add('open'); };
+window.closeCart = function(){ document.getElementById('cart-drawer').classList.remove('open'); };
 
-    window.closeCheckoutModal = function() {
-        document.getElementById('checkout-modal').style.display = 'none';
-    };
+updateCartUI();
 
-    window.sendOtpSms = function() {
-        var phoneNumber = document.getElementById('checkout-phone').value.trim();
-        if(!phoneNumber) { alert("Please provide a valid phone number setup."); return; }
-        
-        var appVerifier = window.recaptchaVerifier;
-        
-        signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-            .then(function(confirmationResult) {
-                window.confirmationResultTracker = confirmationResult;
-                alert("OTP successfully dispatched to " + phoneNumber);
-                document.getElementById('phone-step').style.display = 'none';
-                document.getElementById('otp-step').style.display = 'block';
-            }).catch(function(error) {
-                alert("Error sending OTP SMS: " + error.message);
-            });
-    };
+// ── ORDER TRACKING ──
+var demoOrders = {
+  'SI-2025-001': { product:'Club Madrid Away (Size: L)', meta:'Ordered: May 28, 2025', step:3 },
+  'SI-2025-002': { product:'Nepal Cricket Kit (Size: M)', meta:'Ordered: May 30, 2025', step:2 },
+  'SI-2025-003': { product:'Thunder Futsal (Size: XL)', meta:'Ordered: June 1, 2025', step:1 },
+  'SI-2025-004': { product:'Custom Team Kit × 22', meta:'Ordered: June 2, 2025', step:4 },
+};
+var trackLabels = ['Order Placed','In Production','Quality Check','Dispatched','Delivered'];
+var trackStatusText = ['Placed','In Production','Quality Check','Dispatched','Delivered'];
 
-    window.verifyOtpSms = function() {
-        var code = document.getElementById('checkout-otp').value.trim();
-        if(!code) { alert("Please input the 6-digit confirmation key."); return; }
-        
-        window.confirmationResultTracker.confirm(code).then(function(result) {
-            document.getElementById('otp-step').style.display = 'none';
-            document.getElementById('payment-step').style.display = 'block';
-        }).catch(function(error) {
-            alert("Invalid security confirmation key code. Please retry.");
-        });
-    };
+window.trackOrder = function(){
+  var id = document.getElementById('track-input').value.trim().toUpperCase();
+  var result = document.getElementById('track-result');
+  var order = demoOrders[id];
+  if(!order){
+    alert('Order ID not found. Try: SI-2025-001, SI-2025-002, SI-2025-003, or SI-2025-004');
+    return;
+  }
+  document.getElementById('track-order-label').textContent = 'Order #' + id;
+  document.getElementById('track-product-name').textContent = order.product;
+  document.getElementById('track-product-meta').textContent = order.meta;
+  var badge = document.getElementById('track-status-badge');
+  badge.textContent = trackStatusText[order.step - 1];
+  badge.style.color = order.step === 5 ? '#25D366' : '#e8a020';
 
-    window.completeOrderWithWhatsApp = function() {
-        var itemSummary = cart.map(function(item) {
-            return "• " + item.name + " (Qty: " + item.quantity + ")";
-        }).join("%0A");
-        
-        var totalPrice = document.getElementById('cart-total-price').innerText;
-        var whatsappText = "Hello Sport Island! I verified my phone via OTP. Please process my order:%0A%0A" 
-            + itemSummary + "%0A%0ATotal Value: " + totalPrice;
-            
-        var deskNumber = "1234567890"; // Put your real business mobile number here!
-        window.open("https://wa.me/" + deskNumber + "?text=" + whatsappText, "_blank");
-        
-        cart = [];
-        updateCartUI();
-        window.closeCheckoutModal();
-    };
-  </script>
+  var stepsHtml = trackLabels.map(function(label, i){
+    var stepNum = i+1;
+    var dotClass = stepNum < order.step ? 'done' : stepNum === order.step ? 'active' : '';
+    var labelClass = stepNum < order.step ? 'done' : stepNum === order.step ? 'active' : '';
+    var icon = stepNum < order.step ? '✓' : stepNum === order.step ? '●' : '';
+    return '<div class="track-step">'
+      +'<div class="track-dot '+dotClass+'">'+icon+'</div>'
+      +'<div class="track-step-label '+labelClass+'">'+label+'</div>'
+      +'</div>';
+  }).join('');
+  document.getElementById('track-steps').innerHTML = stepsHtml;
+  result.style.display = 'block';
+};
 
+// ── CHECKOUT MODAL ──
+window.openCheckout = function(){
+  if(cart.length===0){ alert('Your cart is empty!'); return; }
+  closeCart();
+  // reset steps
+  document.querySelectorAll('.modal-step').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('step-phone').classList.add('active');
+  document.getElementById('checkout-modal').classList.add('open');
+};
+window.closeCheckout = function(){ document.getElementById('checkout-modal').classList.remove('open'); };
+
+window.sendOtp = function(){
+  var phone = document.getElementById('checkout-phone').value.trim();
+  if(!phone){ alert('Please enter your phone number.'); return; }
+  // Demo: skip Firebase, show OTP step directly
+  document.getElementById('step-phone').classList.remove('active');
+  document.getElementById('step-otp').classList.add('active');
+  alert('Demo mode: OTP sent to ' + phone + '. Enter any 6 digits to proceed.');
+};
+
+window.verifyOtp = function(){
+  var code = document.getElementById('checkout-otp').value.trim();
+  if(code.length < 4){ alert('Please enter the OTP code.'); return; }
+  document.getElementById('step-otp').classList.remove('active');
+  document.getElementById('step-payment').classList.add('active');
+};
+
+window.payWhatsApp = function(){
+  var summary = cart.map(function(i){ return '• '+i.name+' (Size: '+i.size+', Qty: '+i.qty+')'; }).join('%0A');
+  var total = 'Rs '+cart.reduce(function(s,i){ return s+i.price*i.qty; },0).toLocaleString();
+  var msg = 'Hello Sport Island! I want to place an order:%0A%0A'+summary+'%0A%0ATotal: '+total+'%0A%0APlease confirm my order.';
+  window.open('https://wa.me/9779814174991?text='+msg, '_blank');
+  cart = []; updateCartUI(); closeCheckout();
+};
+
+// ── CUSTOM ORDER FORM ──
+window.sendCustomOrder = function(){
+  var name  = document.getElementById('cf-name').value.trim();
+  var phone = document.getElementById('cf-phone').value.trim();
+  var sport = document.getElementById('cf-sport').value;
+  var qty   = document.getElementById('cf-qty').value.trim();
+  var notes = document.getElementById('cf-notes').value.trim();
+  if(!name || !phone){ alert('Please fill in your name and phone number.'); return; }
+  var msg = 'Hello Sport Island! Custom order request:%0A%0AName: '+encodeURIComponent(name)+'%0APhone: '+encodeURIComponent(phone)+'%0ASport: '+sport+'%0AQty: '+qty+'%0ANotes: '+encodeURIComponent(notes||'—');
+  window.open('https://wa.me/9779814174991?text='+msg, '_blank');
+};
+
+// ── SCROLL ANIMATIONS ──
+var obs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(function(el){ obs.observe(el); });
+</script>
 </body>
 </html>
-    
-    
